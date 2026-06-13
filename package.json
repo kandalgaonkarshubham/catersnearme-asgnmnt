@@ -1,0 +1,13 @@
+{
+  "name": "catersnearme-asgnmnt",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --names 'CLIENT,SERVER' --prefix-colors 'cyan.bold,yellow.bold' --prefix '[{name}]' --kill-others-on-fail 'cd client && pnpm dev' 'cd server && pnpm dev'",
+    "dev:client": "cd client && pnpm dev",
+    "dev:server": "cd server && pnpm dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
