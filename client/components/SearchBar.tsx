@@ -20,7 +20,7 @@ export function SearchBar() {
   }, [setName])
 
   return (
-    <div className="relative flex-1 min-w-60 max-w-sm">
+    <div className="relative w-full">
       <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none flex items-center" aria-hidden="true">
         <Search size={15} />
       </span>

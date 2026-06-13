@@ -29,15 +29,16 @@ export default async function CaterersPage() {
         <Suspense
           fallback={
             <>
-              <div className="flex flex-wrap gap-3 items-center mb-8">
-                <div className="relative flex-1 min-w-60 max-w-sm">
+              {/* Skeleton filter bar */}
+              <div className="sticky top-0 z-20 -mx-6 px-6 py-4 mb-8 bg-bg-base/80 backdrop-blur-md border-b border-border-custom">
+                <div className="relative w-full">
                   <input
-                    className="w-full pl-10 pr-10 py-2.5 bg-bg-surface border border-border-custom rounded-md text-text-primary text-sm transition-all duration-200 outline-none placeholder:text-text-muted"
+                    className="w-full pl-10 pr-10 py-2.5 bg-bg-surface border border-border-custom rounded-md text-text-primary text-sm outline-none placeholder:text-text-muted"
                     placeholder="Search by name…"
                     disabled
                   />
                 </div>
-                <div className="flex gap-1.5 flex-wrap">
+                <div className="flex gap-1.5 flex-wrap mt-3">
                   <span className="text-xs font-semibold text-text-muted uppercase tracking-wider self-center whitespace-nowrap">
                     Price:
                   </span>
@@ -57,10 +58,17 @@ export default async function CaterersPage() {
             </>
           }
         >
-          <div className="flex flex-wrap gap-3 items-center mb-8">
+          {/* ── Filter bar ── */}
+          <div className="sticky top-0 z-20 -mx-6 px-6 py-4 mb-8 bg-bg-base/80 backdrop-blur-md border-b border-border-custom">
+            {/* Row 1 — Search (full width) */}
             <SearchBar />
-            <PriceFilter />
-            <SortFilter />
+
+            {/* Row 2 — Filter pill groups */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
+              <PriceFilter />
+              <span className="hidden sm:block h-5 w-px bg-border-custom shrink-0" aria-hidden="true" />
+              <SortFilter />
+            </div>
           </div>
 
           <CatererListClient caterers={caterers} />
