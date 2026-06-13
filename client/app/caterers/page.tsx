@@ -2,6 +2,7 @@ import { fetchCaterers } from "@/lib/api"
 import { CatererListClient } from "@/components/CatererListClient"
 import { SearchBar } from "@/components/SearchBar"
 import { PriceFilter } from "@/components/PriceFilter"
+import { SortFilter } from "@/components/SortFilter"
 import { SkeletonCard } from "@/components/SkeletonCard"
 import { Suspense } from "react"
 
@@ -59,6 +60,7 @@ export default async function CaterersPage() {
           <div className="flex flex-wrap gap-3 items-center mb-8">
             <SearchBar />
             <PriceFilter />
+            <SortFilter />
           </div>
 
           <CatererListClient caterers={caterers} />

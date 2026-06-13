@@ -2,6 +2,7 @@
 
 import { useQueryState, parseAsString, parseAsInteger } from "nuqs"
 import { useMemo } from "react"
+import type { SortValue } from "./SortFilter"
 import { CatererCard } from "./CatererCard"
 import { SkeletonCard } from "./SkeletonCard"
 import { EmptyState } from "./EmptyState"
@@ -15,14 +16,31 @@ interface Props {
 export function CatererListClient({ caterers, isLoading = false }: Props) {
   const [name] = useQueryState("name", parseAsString.withDefault(""))
   const [maxPrice] = useQueryState("maxPrice", parseAsInteger)
+  const [sort] = useQueryState("sort", parseAsString.withDefault(""))
 
   const filtered = useMemo(() => {
-    return caterers.filter((c) => {
+    const base = caterers.filter((c) => {
       const matchesName = name ? c.name.toLowerCase().includes(name.toLowerCase()) : true
       const matchesPrice = maxPrice ? c.pricePerPlate <= maxPrice : true
       return matchesName && matchesPrice
     })
-  }, [caterers, name, maxPrice])
+
+    if (!sort) return base
+
+    const [key, dir] = (sort as SortValue).split("_") as [string, "asc" | "desc"]
+    const asc = dir === "asc"
+
+    return [...base].sort((a, b) => {
+      if (key === "price") return asc ? a.pricePerPlate - b.pricePerPlate : b.pricePerPlate - a.pricePerPlate
+      if (key === "veg") {
+        const av = a.isVeg ? 1 : 0
+        const bv = b.isVeg ? 1 : 0
+        return asc ? bv - av : av - bv
+      }
+      if (key === "rating") return asc ? a.rating - b.rating : b.rating - a.rating
+      return 0
+    })
+  }, [caterers, name, maxPrice, sort])
 
   if (isLoading) {
     return (
@@ -57,6 +75,9 @@ export function CatererListClient({ caterers, isLoading = false }: Props) {
         )}
         {maxPrice && (
           <> under <strong className="text-text-secondary font-semibold">₹{maxPrice.toLocaleString()}/plate</strong></>
+        )}
+        {sort && (
+          <> · sorted by <strong className="text-text-secondary font-semibold">{sort.replace("_", " ")}</strong></>
         )}
       </p>
 
