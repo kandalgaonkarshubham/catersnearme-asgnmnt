@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { MapPin, Star, Users } from "lucide-react"
+import { MapPin, Star, Users, IndianRupee } from "lucide-react"
 import type { Caterer } from "@/types/caterer"
 
 export function CatererCard({ caterer }: { caterer: Caterer }) {
@@ -54,7 +54,8 @@ export function CatererCard({ caterer }: { caterer: Caterer }) {
 
       <div className="flex items-center justify-between pt-3.5 border-t border-border-custom gap-2">
         <div className="flex items-baseline gap-0.5 text-accent-custom font-bold text-base">
-          <span>₹{caterer.pricePerPlate.toLocaleString()}</span>
+          <IndianRupee size={15} strokeWidth={2.5} className="mr-[-2px] self-center" />
+          <span>{caterer.pricePerPlate.toLocaleString()}</span>
           <span className="text-xs font-medium text-text-muted ml-0.5">/plate</span>
         </div>
         {caterer.minGuests && caterer.maxGuests && (

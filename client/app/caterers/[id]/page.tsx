@@ -66,7 +66,8 @@ export default async function CatererDetailPage({ params }: Props) {
 
         <div className="grid grid-cols-[repeat(auto-fill,minmax(12.5rem,1fr))] gap-4 mb-8">
           <StatCard label="Price per Plate" icon={<IndianRupee size={10} className="inline mr-0.5" />}>
-            <span className="text-lg font-bold text-accent-custom">₹{caterer.pricePerPlate.toLocaleString()}</span>
+            <IndianRupee size={18} strokeWidth={2.5} className="inline-block mr-0.5" />
+            <span className="text-lg font-bold text-accent-custom">{caterer.pricePerPlate.toLocaleString()}</span>
           </StatCard>
 
           {caterer.experience && (
@@ -110,8 +111,8 @@ export default async function CatererDetailPage({ params }: Props) {
         <div className="bg-bg-surface border border-border-custom rounded-lg p-6 flex items-center justify-between flex-wrap gap-4">
           <div>
             <div className="font-bold text-base mb-1">Interested in {caterer.name}?</div>
-            <div className="text-text-secondary text-sm">
-              Starting at ₹{caterer.pricePerPlate.toLocaleString()} per plate
+            <div className="flex items-center text-text-secondary text-sm">
+              Starting at <IndianRupee size={12} className="mx-0.5" />{caterer.pricePerPlate.toLocaleString()} per plate
             </div>
           </div>
           <Link

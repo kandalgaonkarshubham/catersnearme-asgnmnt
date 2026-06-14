@@ -6,6 +6,7 @@ import type { SortValue } from "./SortFilter"
 import { CatererCard } from "./CatererCard"
 import { SkeletonCard } from "./SkeletonCard"
 import { EmptyState } from "./EmptyState"
+import { IndianRupee } from "lucide-react"
 import type { Caterer } from "@/types/caterer"
 
 interface Props {
@@ -74,7 +75,7 @@ export function CatererListClient({ caterers, isLoading = false }: Props) {
           <> for <strong className="text-text-secondary font-semibold">&ldquo;{name}&rdquo;</strong></>
         )}
         {maxPrice && (
-          <> under <strong className="text-text-secondary font-semibold">₹{maxPrice.toLocaleString()}/plate</strong></>
+          <> under <strong className="inline-flex items-center text-text-secondary font-semibold"><IndianRupee size={10} className="mr-0.5" />{maxPrice.toLocaleString()}/plate</strong></>
         )}
         {sort && (
           <> · sorted by <strong className="text-text-secondary font-semibold">{sort.replace("_", " ")}</strong></>
