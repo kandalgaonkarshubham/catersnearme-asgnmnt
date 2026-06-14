@@ -15,59 +15,43 @@ export default async function CaterersPage() {
   const caterers = await fetchCaterers()
 
   return (
-    <main>
-      <div className="px-6 pt-12 pb-6 max-w-7xl mx-auto w-full">
-        <h1 className="text-3xl font-extrabold tracking-tight mb-1.5">Find a Caterer</h1>
-        <p className="text-text-secondary text-sm m-0">
+    <main className="bg-background min-h-screen">
+      <div className="px-6 pt-16 pb-12 max-w-7xl mx-auto w-full">
+        <div className="inline-block mb-4 px-3 py-1 bg-primary-dim border border-primary/10 rounded-full">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
+            Discovery
+          </span>
+        </div>
+        <h1 className="text-5xl md:text-6xl font-serif font-black tracking-tight text-foreground mb-4">
+          The Collection
+        </h1>
+        <p className="text-secondary text-lg max-w-2xl font-medium leading-relaxed">
           {caterers.length > 0
-            ? `${caterers.length} caterers across India — search and filter below`
+            ? `Explore our curated selection of ${caterers.length} distinguished caterers across India.`
             : "Browse verified caterers across India"}
         </p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 pb-16 w-full">
+      <div className="max-w-7xl mx-auto px-6 pb-24 w-full">
         <Suspense
           fallback={
-            <>
-              {/* Skeleton filter bar */}
-              <div className="sticky top-0 z-20 -mx-6 px-6 py-4 mb-8 bg-bg-base/80 backdrop-blur-md border-b border-border-custom">
-                <div className="relative w-full">
-                  <input
-                    className="w-full pl-10 pr-10 py-2.5 bg-bg-surface border border-border-custom rounded-md text-text-primary text-sm outline-none placeholder:text-text-muted"
-                    placeholder="Search by name…"
-                    disabled
-                  />
-                </div>
-                <div className="flex gap-1.5 flex-wrap mt-3">
-                  <span className="text-xs font-semibold text-text-muted uppercase tracking-wider self-center whitespace-nowrap">
-                    Price:
-                  </span>
-                  <button
-                    className="px-3.5 py-2 text-xs font-semibold rounded-sm border border-accent-custom/35 bg-accent-dim text-accent-custom cursor-pointer transition-all duration-150 whitespace-nowrap"
-                    disabled
-                  >
-                    All prices
-                  </button>
-                </div>
-              </div>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(18.75rem,1fr))] gap-5">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <SkeletonCard key={i} />
-                ))}
-              </div>
-            </>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(18.75rem,1fr))] gap-8">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <SkeletonCard key={i} />
+              ))}
+            </div>
           }
         >
-          {/* ── Filter bar ── */}
-          <div className="sticky top-0 z-20 -mx-6 px-6 py-4 mb-8 bg-bg-base/80 backdrop-blur-md border-b border-border-custom">
-            {/* Row 1 — Search (full width) */}
-            <SearchBar />
-
-            {/* Row 2 — Filter pill groups */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
-              <PriceFilter />
-              <span className="hidden sm:block h-5 w-px bg-border-custom shrink-0" aria-hidden="true" />
-              <SortFilter />
+          {/* ── Filter Section ── */}
+          <div className="mb-12">
+            <div className="flex flex-col gap-6">
+              <SearchBar />
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="text-[10px] font-black uppercase tracking-widest text-muted mr-2">Refine by:</div>
+                <PriceFilter />
+                <div className="h-4 w-px bg-border shrink-0" aria-hidden="true" />
+                <SortFilter />
+              </div>
             </div>
           </div>
 

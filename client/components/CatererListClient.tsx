@@ -45,7 +45,7 @@ export function CatererListClient({ caterers, isLoading = false }: Props) {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(18.75rem,1fr))] gap-5">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(18.75rem,1fr))] gap-8">
         {Array.from({ length: 12 }).map((_, i) => (
           <SkeletonCard key={i} />
         ))}
@@ -55,7 +55,7 @@ export function CatererListClient({ caterers, isLoading = false }: Props) {
 
   if (caterers.length === 0) {
     return (
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(18.75rem,1fr))] gap-5">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(18.75rem,1fr))] gap-8">
         <EmptyState
           type="error"
           title="Couldn't load caterers"
@@ -67,36 +67,31 @@ export function CatererListClient({ caterers, isLoading = false }: Props) {
 
   return (
     <>
-      <p className="text-xs text-text-muted mb-5">
-        Showing{" "}
-        <strong className="text-text-secondary font-semibold">{filtered.length}</strong>
-        {" "}of {caterers.length} caterers
-        {name && (
-          <> for <strong className="text-text-secondary font-semibold">&ldquo;{name}&rdquo;</strong></>
-        )}
-        {maxPrice && (
-          <> under <strong className="inline-flex items-center text-text-secondary font-semibold"><IndianRupee size={10} className="mr-0.5" />{maxPrice.toLocaleString()}/plate</strong></>
-        )}
-        {sort && (
-          <> · sorted by <strong className="text-text-secondary font-semibold">{sort.replace("_", " ")}</strong></>
-        )}
-      </p>
+      <div className="flex items-center gap-2 mb-8">
+        <div className="h-px flex-1 bg-border/50" />
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted whitespace-nowrap">
+          Displaying {filtered.length} of {caterers.length} results
+        </p>
+        <div className="h-px flex-1 bg-border/50" />
+      </div>
 
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(18.75rem,1fr))] gap-5">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(18.75rem,1fr))] gap-8">
         {filtered.length > 0 ? (
           filtered.map((caterer) => (
             <CatererCard key={caterer._id} caterer={caterer} />
           ))
         ) : (
-          <EmptyState
-            type="empty"
-            title="No caterers found"
-            subtitle={
-              name || maxPrice
-                ? "Try adjusting your search or removing the price filter."
-                : "No caterers are available right now."
-            }
-          />
+          <div className="col-span-full py-20">
+            <EmptyState
+              type="empty"
+              title="No caterers found"
+              subtitle={
+                name || maxPrice
+                  ? "Try adjusting your search or removing the price filter."
+                  : "No caterers are available right now."
+              }
+            />
+          </div>
         )}
       </div>
     </>

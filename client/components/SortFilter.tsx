@@ -35,11 +35,7 @@ export function SortFilter() {
   }
 
   return (
-    <div className="flex gap-1.5 flex-wrap items-center">
-      <span className="flex items-center gap-1 text-xs font-semibold text-text-muted uppercase tracking-wider whitespace-nowrap">
-        <ArrowUpDown size={12} />
-        Sort:
-      </span>
+    <div className="flex gap-2 flex-wrap items-center">
       {SORT_OPTIONS.map((opt) => {
         const isActive = sort === opt.value
         const CategoryIcon = GROUP_ICONS[opt.group]
@@ -49,15 +45,15 @@ export function SortFilter() {
             key={opt.value}
             id={`sort-filter-${opt.value}`}
             type="button"
-            className={`inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-sm border transition-all duration-150 whitespace-nowrap hover:border-border-hover-custom hover:text-text-primary ${
+            className={`inline-flex items-center gap-1.5 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all duration-300 whitespace-nowrap ${
               isActive
-                ? "bg-accent-dim border-accent-custom/35 text-accent-custom font-semibold"
-                : "border-border-custom bg-bg-surface text-text-secondary"
+                ? "bg-foreground border-foreground text-background"
+                : "border-border bg-surface text-secondary hover:border-foreground hover:text-foreground"
             }`}
             onClick={() => toggle(opt.value)}
             aria-pressed={isActive}
           >
-            <CategoryIcon size={11} strokeWidth={2.5} />
+            <CategoryIcon size={10} strokeWidth={3} />
             {opt.label}
           </button>
         )
