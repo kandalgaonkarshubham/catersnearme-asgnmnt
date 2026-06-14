@@ -2,6 +2,12 @@
 
 A catering search platform to discover, search, and filter through caterers across Indian cities.
 
+## Live Deployment
+| Service | URL |
+|---------|-----|
+| **Frontend** | https://catersnearme.vercel.app/ |
+| **Backend API** | https://catersnearme-backend.vercel.app/ |
+
 ## Tech Stack
 - **Backend**: Node.js, Express, MongoDB (Mongoose), Zod, express-rate-limit
 - **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS, Lucide
