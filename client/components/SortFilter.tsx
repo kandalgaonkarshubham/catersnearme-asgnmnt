@@ -1,5 +1,6 @@
 "use client"
 
+import type React from "react"
 import { useQueryState, parseAsString } from "nuqs"
 import { 
   ArrowUpDown, 

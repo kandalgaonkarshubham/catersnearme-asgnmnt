@@ -40,11 +40,15 @@ export function CatererCard({ caterer }: { caterer: Caterer }) {
             <span className="text-sm font-bold text-foreground">{caterer.rating.toFixed(1)}</span>
             <span className="text-[10px] text-muted font-medium">({caterer.reviewCount})</span>
           </div>
-          <div className="h-4 w-px bg-border/50" />
-          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted">
-            <Users size={12} />
-            <span>{caterer.minGuests}–{caterer.maxGuests.toLocaleString()}</span>
-          </div>
+          {caterer.minGuests != null && caterer.maxGuests != null && (
+            <>
+              <div className="h-4 w-px bg-border/50" />
+              <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted">
+                <Users size={12} />
+                <span>{caterer.minGuests.toLocaleString()}–{caterer.maxGuests.toLocaleString()}</span>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="flex flex-wrap gap-2 mb-6">
