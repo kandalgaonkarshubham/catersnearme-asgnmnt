@@ -2,56 +2,70 @@
 
 import type React from "react"
 import { useQueryState, parseAsString } from "nuqs"
-import { 
-  ArrowUpDown, 
-  IndianRupee, 
-  Leaf, 
-  Star 
-} from "lucide-react"
+import { IndianRupee, Leaf, Star } from "lucide-react"
 
-export type SortKey = "price" | "veg" | "rating"
 export type SortDir = "asc" | "desc"
-export type SortValue = `${SortKey}_${SortDir}` | ""
+export type SortKey = "price" | "veg" | "rating"
 
-const SORT_OPTIONS: { label: string; value: SortValue; group: SortKey }[] = [
-  { label: "Price: Low to High", value: "price_asc", group: "price" },
-  { label: "Price: High to Low", value: "price_desc", group: "price" },
-  { label: "Veg first", value: "veg_asc", group: "veg" },
-  { label: "Non-veg first", value: "veg_desc", group: "veg" },
-  { label: "Rating: Low to High", value: "rating_asc", group: "rating" },
-  { label: "Rating: High to Low", value: "rating_desc", group: "rating" },
+export const SORT_PARAM: Record<SortKey, string> = {
+  price: "sortPrice",
+  veg: "sortVeg",
+  rating: "sortRating",
+}
+
+const SORT_OPTIONS: { label: string; dir: SortDir; group: SortKey }[] = [
+  { label: "Price: Low to High",  dir: "asc",  group: "price" },
+  { label: "Price: High to Low",  dir: "desc", group: "price" },
+  { label: "Veg first",           dir: "asc",  group: "veg"   },
+  { label: "Non-veg first",       dir: "desc", group: "veg"   },
+  { label: "Rating: Low to High", dir: "asc",  group: "rating" },
+  { label: "Rating: High to Low", dir: "desc", group: "rating" },
 ]
 
 const GROUP_ICONS: Record<SortKey, React.ElementType> = {
-  price: IndianRupee,
-  veg: Leaf,
+  price:  IndianRupee,
+  veg:    Leaf,
   rating: Star,
 }
 
-export function SortFilter() {
-  const [sort, setSort] = useQueryState("sort", parseAsString.withDefault(""))
+function useGroupSort(param: string) {
+  return useQueryState(param, parseAsString.withDefault(""))
+}
 
-  const toggle = (value: SortValue) => {
-    setSort(sort === value ? "" : value)
+export function SortFilter() {
+  const [sortPrice,  setSortPrice]  = useGroupSort(SORT_PARAM.price)
+  const [sortVeg,    setSortVeg]    = useGroupSort(SORT_PARAM.veg)
+  const [sortRating, setSortRating] = useGroupSort(SORT_PARAM.rating)
+
+  const stateMap: Record<SortKey, [string, (v: string | null) => void]> = {
+    price:  [sortPrice,  setSortPrice],
+    veg:    [sortVeg,    setSortVeg],
+    rating: [sortRating, setSortRating],
+  }
+
+  const toggle = (group: SortKey, dir: SortDir) => {
+    const [current, setter] = stateMap[group]
+    setter(current === dir ? null : dir)
   }
 
   return (
     <div className="flex gap-2 flex-wrap items-center">
       {SORT_OPTIONS.map((opt) => {
-        const isActive = sort === opt.value
+        const [current] = stateMap[opt.group]
+        const isActive = current === opt.dir
         const CategoryIcon = GROUP_ICONS[opt.group]
 
         return (
           <button
-            key={opt.value}
-            id={`sort-filter-${opt.value}`}
+            key={`${opt.group}_${opt.dir}`}
+            id={`sort-filter-${opt.group}-${opt.dir}`}
             type="button"
             className={`inline-flex items-center gap-1.5 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all duration-300 whitespace-nowrap ${
               isActive
                 ? "bg-foreground border-foreground text-background"
                 : "border-border bg-surface text-secondary hover:border-foreground hover:text-foreground"
             }`}
-            onClick={() => toggle(opt.value)}
+            onClick={() => toggle(opt.group, opt.dir)}
             aria-pressed={isActive}
           >
             <CategoryIcon size={10} strokeWidth={3} />

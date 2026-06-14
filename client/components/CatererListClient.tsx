@@ -2,11 +2,10 @@
 
 import { useQueryState, parseAsString, parseAsInteger } from "nuqs"
 import { useMemo } from "react"
-import type { SortValue } from "./SortFilter"
+import { SORT_PARAM } from "./SortFilter"
 import { CatererCard } from "./CatererCard"
 import { SkeletonCard } from "./SkeletonCard"
 import { EmptyState } from "./EmptyState"
-import { IndianRupee } from "lucide-react"
 import type { Caterer } from "@/types/caterer"
 
 interface Props {
@@ -15,33 +14,45 @@ interface Props {
 }
 
 export function CatererListClient({ caterers, isLoading = false }: Props) {
-  const [name] = useQueryState("name", parseAsString.withDefault(""))
-  const [maxPrice] = useQueryState("maxPrice", parseAsInteger)
-  const [sort] = useQueryState("sort", parseAsString.withDefault(""))
+  const [name]       = useQueryState("name",                   parseAsString.withDefault(""))
+  const [maxPrice]   = useQueryState("maxPrice",               parseAsInteger)
+  const [sortPrice]  = useQueryState(SORT_PARAM.price,  parseAsString.withDefault(""))
+  const [sortVeg]    = useQueryState(SORT_PARAM.veg,    parseAsString.withDefault(""))
+  const [sortRating] = useQueryState(SORT_PARAM.rating, parseAsString.withDefault(""))
 
   const filtered = useMemo(() => {
     const base = caterers.filter((c) => {
-      const matchesName = name ? c.name.toLowerCase().includes(name.toLowerCase()) : true
+      const matchesName  = name     ? c.name.toLowerCase().includes(name.toLowerCase()) : true
       const matchesPrice = maxPrice ? c.pricePerPlate <= maxPrice : true
       return matchesName && matchesPrice
     })
 
-    if (!sort) return base
-
-    const [key, dir] = (sort as SortValue).split("_") as [string, "asc" | "desc"]
-    const asc = dir === "asc"
+    // Apply each active sort independently and chain them.
+    // If multiple sorts are active the order of priority is: price → veg → rating.
+    const hasSort = sortPrice || sortVeg || sortRating
+    if (!hasSort) return base
 
     return [...base].sort((a, b) => {
-      if (key === "price") return asc ? a.pricePerPlate - b.pricePerPlate : b.pricePerPlate - a.pricePerPlate
-      if (key === "veg") {
+      if (sortPrice) {
+        const asc = sortPrice === "asc"
+        const diff = asc ? a.pricePerPlate - b.pricePerPlate : b.pricePerPlate - a.pricePerPlate
+        if (diff !== 0) return diff
+      }
+      if (sortVeg) {
+        const asc = sortVeg === "asc"
         const av = a.isVeg ? 1 : 0
         const bv = b.isVeg ? 1 : 0
-        return asc ? bv - av : av - bv
+        const diff = asc ? bv - av : av - bv
+        if (diff !== 0) return diff
       }
-      if (key === "rating") return asc ? a.rating - b.rating : b.rating - a.rating
+      if (sortRating) {
+        const asc = sortRating === "asc"
+        const diff = asc ? a.rating - b.rating : b.rating - a.rating
+        if (diff !== 0) return diff
+      }
       return 0
     })
-  }, [caterers, name, maxPrice, sort])
+  }, [caterers, name, maxPrice, sortPrice, sortVeg, sortRating])
 
   if (isLoading) {
     return (
