@@ -33,7 +33,8 @@ cd client && pnpm install && cd ..
 ```env
 PORT=5000
 MONGO_URI=<your-mongodb-connection-string>
-CLIENT_URL=http://localhost:3000   # optional, for CORS
+CLIENT_URL=http://localhost:3000   # for CORS
+API_KEY=admin-secret-key           # for POST /api/caterers
 ```
 
 **`client/.env.local`** (already present):
@@ -94,19 +95,24 @@ pnpm dev:client   # Next.js only
 
 ### `POST /api/caterers` — request body
 
-```json
-{
-  "name": "Sharma Caterers",
-  "location": { "city": "Mumbai", "area": "Andheri" },
-  "pricePerPlate": 650,
-  "cuisines": ["North Indian", "Punjabi"],
-  "rating": 4.2,
-  "isVeg": false,
-  "experience": 8,
-  "minGuests": 50,
-  "maxGuests": 500,
-  "tagline": "Taste that brings people together"
-}
+> **Auth required:** This endpoint requires an `X-API-KEY` header. Default for development: `admin-secret-key`.
+
+```bash
+curl -X POST http://localhost:5000/api/caterers \
+  -H "Content-Type: application/json" \
+  -H "X-API-KEY: admin-secret-key" \
+  -d '{
+    "name": "Sharma Caterers",
+    "location": { "city": "Mumbai", "area": "Andheri" },
+    "pricePerPlate": 650,
+    "cuisines": ["North Indian", "Punjabi"],
+    "rating": 4.2,
+    "isVeg": false,
+    "experience": 8,
+    "minGuests": 50,
+    "maxGuests": 500,
+    "tagline": "Taste that brings people together"
+  }'
 ```
 
 > **Rate limit:** `POST /api/caterers` is limited to **5 requests per IP per 15 minutes** (returns `429` when exceeded).
